@@ -1258,6 +1258,31 @@ export const configService = {
   }
 }
 
+export interface VersionInfo {
+  version: string
+}
+
+export interface LatestVersionInfo {
+  version: string
+  tagName: string | null
+  name: string | null
+  publishedAt: string | null
+  htmlUrl: string | null
+  body: string | null
+}
+
+export const versionService = {
+  async getVersion(): Promise<VersionInfo> {
+    const response = await api.get('/version')
+    return response.data
+  },
+
+  async getLatest(): Promise<LatestVersionInfo> {
+    const response = await api.get('/version/latest')
+    return response.data
+  }
+}
+
 export interface GptAccountsListParams {
   page?: number
   pageSize?: number

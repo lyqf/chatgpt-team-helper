@@ -368,9 +368,14 @@ router.post('/', async (req, res) => {
       return code
     }
 
-    // 自动生成5个兑换码并绑定到该账号
+    // 自动生成兑换码并绑定到该账号
+    // Team 账号默认总容量 5，新建账号默认人数按 1 计算，所以默认生成 4 个兑换码
+    const totalCapacity = 5
+    const currentUserCountForCodes = Math.max(1, Number(finalUserCount) || 1)
+    const codesToGenerate = Math.max(0, totalCapacity - currentUserCountForCodes)
+
     const generatedCodes = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < codesToGenerate; i++) {
       let code = generateRedemptionCode()
       let attempts = 0
       let success = false

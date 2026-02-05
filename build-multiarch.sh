@@ -3,10 +3,10 @@
 # 本地多架构 Docker 镜像构建脚本
 # 使用方法: ./build-multiarch.sh
 # 环境变量:
-#   IMAGE_NAME - 镜像名称 (默认: kylsky/auto-gpt-team)
+#   IMAGE_NAME - 镜像名称 (默认: ghcr.io/kylsky/chatgpt-team-helper)
 #   TAG - 镜像标签 (默认: latest)
 #   PLATFORMS - 目标平台 (默认: linux/amd64,linux/arm64)
-#   PUSH - 是否推送到 Docker Hub (默认: false)
+#   PUSH - 是否推送到远程仓库 (默认: false)
 
 set -euo pipefail
 
@@ -61,7 +61,7 @@ BUILD_ARGS=(
 
 if [ "${PUSH}" = "true" ]; then
     BUILD_ARGS+=(--push)
-    print_warning "将推送到 Docker Hub..."
+    print_warning "将推送到远程仓库..."
 else
     echo "仅构建，不推送（设置 PUSH=true 推送）"
     BUILD_ARGS+=(--output type=image,push=false)
@@ -80,7 +80,7 @@ echo "======================================"
 
 if [ "${PUSH}" = "true" ]; then
     echo ""
-    print_success "镜像已推送到 Docker Hub"
+    print_success "镜像已推送"
     echo ""
     echo "验证多架构镜像："
     echo "  docker buildx imagetools inspect ${IMAGE_NAME}:${TAG}"

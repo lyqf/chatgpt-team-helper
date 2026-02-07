@@ -334,7 +334,9 @@ const loadCodes = async () => {
 
 const loadAccounts = async () => {
   try {
-    const pageSize = 200
+    // Backend caps pageSize at 100. If we request more, the API will still return 100
+    // but our pagination loop would stop early (batch.length < requested pageSize).
+    const pageSize = 100
     let page = 1
     const allAccounts: GptAccount[] = []
 
@@ -343,12 +345,15 @@ const loadAccounts = async () => {
       const batch = response.accounts || []
       allAccounts.push(...batch)
 
-      const total = response.pagination?.total ?? allAccounts.length
+      const total = Number(response.pagination?.total ?? allAccounts.length)
+      const effectivePageSize = Number(response.pagination?.pageSize ?? pageSize)
+
       if (allAccounts.length >= total) break
-      if (batch.length < pageSize) break
+      if (batch.length < effectivePageSize) break
 
       page += 1
-      if (page > 50) break
+      // Safety valve to avoid an infinite loop if the backend pagination breaks.
+      if (page > 200) break
     }
 
     accounts.value = allAccounts

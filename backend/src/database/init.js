@@ -2075,12 +2075,18 @@ export async function initDatabase() {
 	              saveDatabase()
 	            }
 
-	            if (!columns.includes('ban_processed')) {
-	              database.run('ALTER TABLE gpt_accounts ADD COLUMN ban_processed INTEGER DEFAULT 0')
-	              console.log('已添加 ban_processed 列到 gpt_accounts 表')
-	              saveDatabase()
-	            }
-	          }
+            if (!columns.includes('ban_processed')) {
+              database.run('ALTER TABLE gpt_accounts ADD COLUMN ban_processed INTEGER DEFAULT 0')
+              console.log('已添加 ban_processed 列到 gpt_accounts 表')
+              saveDatabase()
+            }
+
+            if (!columns.includes('remark')) {
+              database.run('ALTER TABLE gpt_accounts ADD COLUMN remark TEXT')
+              console.log('已添加 remark 列到 gpt_accounts 表')
+              saveDatabase()
+            }
+          }
 
 	          // 检查 redemption_codes 表的列
 	          const redemptionTableInfo = database.exec('PRAGMA table_info(redemption_codes)')
@@ -2222,6 +2228,7 @@ export async function initDatabase() {
 	      is_demoted INTEGER DEFAULT 0,
 	      is_banned INTEGER DEFAULT 0,
 	      ban_processed INTEGER DEFAULT 0,
+	      remark TEXT,
 	      created_at DATETIME DEFAULT (DATETIME('now', 'localtime')),
 	      updated_at DATETIME DEFAULT (DATETIME('now', 'localtime'))
 	    )
@@ -2318,6 +2325,11 @@ export async function initDatabase() {
 	      if (!columns.includes('ban_processed')) {
 	        database.run('ALTER TABLE gpt_accounts ADD COLUMN ban_processed INTEGER DEFAULT 0')
 	        console.log('已添加 ban_processed 列到 gpt_accounts 表')
+	      }
+
+	      if (!columns.includes('remark')) {
+	        database.run('ALTER TABLE gpt_accounts ADD COLUMN remark TEXT')
+	        console.log('已添加 remark 列到 gpt_accounts 表')
 	      }
 	    }
 	  } catch (err) {

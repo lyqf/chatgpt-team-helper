@@ -355,6 +355,7 @@ export interface GptAccount {
   chatgptAccountId?: string
   oaiDeviceId?: string
   expireAt?: string | null
+  remark?: string | null
   createdAt: string
   updatedAt: string
 }
@@ -371,6 +372,7 @@ export interface CreateGptAccountDto {
   chatgptAccountId: string
   oaiDeviceId?: string
   expireAt?: string
+  remark?: string | null
 }
 
 export interface ChatgptAccountCheckInfo {
